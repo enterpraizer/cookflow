@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}CookFlow — Рецепты{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1>CookFlow</h1>
+  <p>Интерактивные рецепты с шагами и таймерами.</p>
+
+  <div class="row">
+    <input id="searchInput" class="input" placeholder="Поиск по ингредиентам: курица,сыр">
+    <button id="searchBtn" class="btn"><i class="fa-solid fa-magnifying-glass"></i> Искать</button>
+  </div>
+</section>
+
+<section>
+  <div class="row row-between">
+    <h2>Рецепты</h2>
+    <a class="btn btn-outline" href="/my-recipes"><i class="fa-solid fa-bookmark"></i> Избранное</a>
+  </div>
+
+  <div id="recipesGrid" class="grid"></div>
+
+  <div class="row" style="margin-top:12px;">
+  <button id="prevPage" class="btn btn-outline">Назад</button>
+  <span id="pageInfo" class="muted"></span>
+  <button id="nextPage" class="btn btn-outline">Далее</button>
+</div>
+
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  window.addEventListener("DOMContentLoaded", async () => {
+    await CookFlow.initAuthUI();
+    await CookFlow.loadRecipes();
+
+    document.getElementById("searchBtn").addEventListener("click", async () => {
+      const q = document.getElementById("searchInput").value.trim();
+      await CookFlow.searchRecipes(q);
+    });
+  });
+</script>
+{% endblock %}

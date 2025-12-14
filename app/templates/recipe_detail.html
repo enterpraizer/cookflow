@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Рецепт{% endblock %}
+
+{% block content %}
+<div id="recipeRoot" data-recipe-id="{{ recipe_id }}">
+  <div id="recipeHeader"></div>
+
+  <div class="row">
+    <button id="startCookingBtn" class="btn"><i class="fa-solid fa-play"></i> Начать готовить</button>
+    <button id="toggleSaveBtn" class="btn btn-outline"><i class="fa-solid fa-bookmark"></i> В избранное</button>
+    <button id="editRecipeBtn" class="btn btn-outline hidden">
+  <i class="fa-solid fa-pen"></i> Редактировать
+</button>
+
+  </div>
+
+  <h3>Ингредиенты</h3>
+  <ul id="ingredientsList" class="list"></ul>
+
+  <h3>Шаги</h3>
+  <ol id="stepsList" class="list"></ol>
+
+  <h3>Комментарии</h3>
+  <div id="commentsList" class="comments"></div>
+
+  <form id="commentForm" class="card">
+    <textarea id="commentText" class="textarea" placeholder="Напишите комментарий..."></textarea>
+    <button class="btn" type="submit">Отправить</button>
+  </form>
+</div>
+{% include "components/cooking_mode.html" %}
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  window.addEventListener("DOMContentLoaded", async () => {
+    await CookFlow.initAuthUI();
+
+    const root = document.getElementById("recipeRoot");
+    const recipeId = parseInt(root.dataset.recipeId, 10);
+
+    const recipe = await CookFlow.loadRecipe(recipeId);
+    await CookFlow.loadComments(recipeId);
+
+    document.getElementById("startCookingBtn").addEventListener("click", () => {
+      CookFlow.startCookingMode(recipe);
+    });
+
+    document.getElementById("toggleSaveBtn").addEventListener("click", async () => {
+      await CookFlow.toggleSaveRecipe(recipeId);
+      await CookFlow.loadRecipe(recipeId); // обновить is_saved
+    });
+
+    document.getElementById("commentForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const text = document.getElementById("commentText").value.trim();
+      await CookFlow.addComment(recipeId, text);
+      document.getElementById("commentText").value = "";
+      await CookFlow.loadComments(recipeId);
+    });
+  });
+</script>
+{% endblock %}

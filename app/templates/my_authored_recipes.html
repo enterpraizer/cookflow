@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Мои рецепты{% endblock %}
+
+{% block content %}
+<h1>Мои рецепты</h1>
+<div class="row">
+  <a class="btn" href="/add-recipe"><i class="fa-solid fa-plus"></i> Добавить рецепт</a>
+</div>
+<div id="myAuthoredGrid" class="grid"></div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  window.addEventListener("DOMContentLoaded", async () => {
+    await CookFlow.initAuthUI();
+    await CookFlow.loadMyAuthoredRecipes();
+  });
+</script>
+{% endblock %}

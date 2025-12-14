@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Челленджи{% endblock %}
+
+{% block content %}
+<h1>Челленджи</h1>
+
+<div class="row row-between">
+  <h2>Доступные</h2>
+  <button id="refreshChallenges" class="btn btn-outline">Обновить</button>
+</div>
+<div id="challengesGrid" class="grid"></div>
+
+<h2>Мои активные</h2>
+<div id="myChallenges" class="stack"></div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  window.addEventListener("DOMContentLoaded", async () => {
+    await CookFlow.initAuthUI();
+    await CookFlow.loadChallenges();
+
+    document.getElementById("refreshChallenges").addEventListener("click", async () => {
+      await CookFlow.loadChallenges();
+    });
+  });
+</script>
+{% endblock %}

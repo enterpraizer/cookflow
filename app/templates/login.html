@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+<h1>Вход</h1>
+<form id="loginForm" class="card">
+  <input id="loginEmail" class="input" type="email" placeholder="Email" required>
+  <input id="loginPassword" class="input" type="password" placeholder="Пароль" required>
+  <button class="btn" type="submit">Войти</button>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  window.addEventListener("DOMContentLoaded", async () => {
+    await CookFlow.initAuthUI();
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      await CookFlow.login(
+        document.getElementById("loginEmail").value,
+        document.getElementById("loginPassword").value
+      );
+      window.location.href = "/";
+    });
+  });
+</script>
+{% endblock %}

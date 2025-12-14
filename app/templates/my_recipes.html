@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Избранное{% endblock %}
+
+{% block content %}
+<h1>Избранные рецепты</h1>
+<div id="savedGrid" class="grid"></div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  window.addEventListener("DOMContentLoaded", async () => {
+    await CookFlow.initAuthUI();
+    await CookFlow.loadSavedRecipes();
+  });
+</script>
+{% endblock %}

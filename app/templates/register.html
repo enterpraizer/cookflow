@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+<h1>Регистрация</h1>
+<form id="registerForm" class="card">
+  <input id="regName" class="input" type="text" placeholder="Имя" required>
+  <input id="regEmail" class="input" type="email" placeholder="Email" required>
+  <input id="regPassword" class="input" type="password" placeholder="Пароль (мин 6)" required>
+  <button class="btn" type="submit">Создать аккаунт</button>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  window.addEventListener("DOMContentLoaded", async () => {
+    await CookFlow.initAuthUI();
+    document.getElementById("registerForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      await CookFlow.register(
+        document.getElementById("regName").value,
+        document.getElementById("regEmail").value,
+        document.getElementById("regPassword").value
+      );
+      window.location.href = "/";
+    });
+  });
+</script>
+{% endblock %}

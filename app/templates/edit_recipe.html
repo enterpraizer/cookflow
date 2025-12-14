@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Редактировать рецепт{% endblock %}
+
+{% block content %}
+<div id="editRoot" data-recipe-id="{{ recipe_id }}">
+  <h1>Редактировать рецепт</h1>
+
+  <form id="editRecipeForm" class="card" enctype="multipart/form-data">
+    <input id="title" class="input" placeholder="Название" required>
+    <textarea id="description" class="textarea" placeholder="Описание"></textarea>
+
+    <div class="row">
+      <input id="cooking_time" class="input" type="number" min="0" placeholder="Время (мин)">
+      <select id="difficulty" class="input">
+        <option value="">Сложность (необязательно)</option>
+        <option value="Легко">Легко</option>
+        <option value="Средне">Средне</option>
+        <option value="Сложно">Сложно</option>
+      </select>
+      <input id="servings" class="input" type="number" min="1" placeholder="Порции">
+    </div>
+
+    <div class="card" style="padding:12px;">
+      <div class="muted">Новое изображение рецепта (необязательно)</div>
+      <input id="image" class="input" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
+      <div class="muted" id="currentImageNote"></div>
+    </div>
+
+    <div class="card" style="padding:12px;">
+      <div class="row row-between">
+        <h3 style="margin:0;">Ингредиенты</h3>
+        <button type="button" id="addIngredientBtn" class="btn btn-outline">+ Добавить</button>
+      </div>
+      <div id="ingredientsBox" class="stack"></div>
+    </div>
+
+    <div class="card" style="padding:12px;">
+      <div class="row row-between">
+        <h3 style="margin:0;">Шаги</h3>
+        <button type="button" id="addStepBtn" class="btn btn-outline">+ Добавить</button>
+      </div>
+      <div id="stepsBox" class="stack"></div>
+    </div>
+
+    <div class="card" style="padding:12px;">
+      <div class="muted">Категории (через запятую)</div>
+      <input id="categories" class="input" placeholder="Категории">
+    </div>
+
+    <div class="row">
+      <button class="btn" type="submit"><i class="fa-solid fa-floppy-disk"></i> Сохранить</button>
+      <button id="deleteBtn" class="btn btn-outline" type="button"><i class="fa-solid fa-trash"></i> Удалить</button>
+      <a class="btn btn-outline" href="/recipe/{{ recipe_id }}">Отмена</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  window.addEventListener("DOMContentLoaded", async () => {
+    await CookFlow.initAuthUI();
+
+    const recipeId = parseInt(document.getElementById("editRoot").dataset.recipeId, 10);
+    await CookFlow.editRecipeInit(recipeId);
+  });
+</script>
+{% endblock %}
